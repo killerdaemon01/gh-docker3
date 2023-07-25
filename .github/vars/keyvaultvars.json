@@ -15,7 +15,7 @@
         "username": "acrusername",
         "password": "acrpassword",
         "app_service_name": "mywebapp29018",
-        "registry_name": "mywebapp29018",
+        "registry_name": "myregistry29017",
         "repository_name": "scm-hub-service"
       }
     ]
