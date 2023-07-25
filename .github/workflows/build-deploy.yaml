@@ -1,0 +1,59 @@
+name: xpe-hubServices-deploy
+on:
+    workflow_dispatch:
+
+jobs:
+    CI:
+        # strategy:
+        #     matrix: 
+        #         environment: [development, preproduction]
+        #         include:
+        #             - environment: development
+        #               keyvault: ${{env.keyvault_dev}}
+        #               acr_username_secret: ${{env.acr_username_secret}}
+        #               acr_password_secret: ${{env.acr_password_secret}}
+        #               registry_name: ${{env.registry_dev}}
+        #               repository_name: ${{env.repository_name}}
+        #             - environment: preproduction
+        #               keyvault: ${{env.preprod_keyvault}}
+        #               acr_username_secret: ${{env.acr_username_secret}}
+        #               acr_password_secret: ${{env.acr_password_secret}}
+        #               registry_name: ${{env.registry_preprod}}
+        #               repository_name: ${{env.repository_name}}
+
+        permissions:
+            contents: 'read'
+            id-token: 'write'
+        
+
+        # uses: Maersk-Global/scm-github-actions-templates/.github/workflows/ci_javascript_docker.yml@v6.145.0
+        # with: 
+        #     keyvault: ${{matrix.keyvault}}
+        #     acr_username_secret: ${{matrix.acr_username_secret}}
+        #     acr_password_secret: ${{matrix.acr_password_secret}}
+        #     registry_name: ${{matrix.acr_name}}
+        #     repository_name: ${{matrix.image_name}}
+        #     environment: ${{matrix.environment}}
+        #     tag: ${{github.run_id}}
+        # secrets: inherit
+
+        uses: Maersk-Global/scm-github-actions-templates/.github/workflows/ci_javascript_docker.yml@v6.147.0
+        with: 
+            keyvaultfile: keyvaults.json
+            environment: development
+            tag: ${{github.run_id}}
+        secrets: inherit
+  
+    Dev:
+        needs: CI
+        permissions:
+            contents: 'read'
+            id-token: 'write'
+        uses: Maersk-Global/scm-github-actions-templates/.github/workflows/ci_javascript_docker.yml@v6.147.0
+        with:
+            keyvaultfile: keyvaults.json
+            tag: ${{github.run_id}}
+            environment: development
+            slot_name: production
+            swap_slot: false
+        secrets: inherit
