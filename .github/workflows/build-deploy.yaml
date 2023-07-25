@@ -3,49 +3,32 @@ on:
     workflow_dispatch:
 
 jobs:
-    CI:
-        # strategy:
-        #     matrix: 
-        #         environment: [development, preproduction]
-        #         include:
-        #             - environment: development
-        #               keyvault: ${{env.keyvault_dev}}
-        #               acr_username_secret: ${{env.acr_username_secret}}
-        #               acr_password_secret: ${{env.acr_password_secret}}
-        #               registry_name: ${{env.registry_dev}}
-        #               repository_name: ${{env.repository_name}}
-        #             - environment: preproduction
-        #               keyvault: ${{env.preprod_keyvault}}
-        #               acr_username_secret: ${{env.acr_username_secret}}
-        #               acr_password_secret: ${{env.acr_password_secret}}
-        #               registry_name: ${{env.registry_preprod}}
-        #               repository_name: ${{env.repository_name}}
-
+    CI-Dev:
         permissions:
             contents: 'read'
             id-token: 'write'
-        
-
-        # uses: killerdaemon01/gh-template2/.github/workflows/ci_javascript.yaml
-        # with: 
-        #     keyvault: ${{matrix.keyvault}}
-        #     acr_username_secret: ${{matrix.acr_username_secret}}
-        #     acr_password_secret: ${{matrix.acr_password_secret}}
-        #     registry_name: ${{matrix.acr_name}}
-        #     repository_name: ${{matrix.image_name}}
-        #     environment: ${{matrix.environment}}
-        #     tag: ${{github.run_id}}
-        # secrets: inherit
-
+            
         uses: killerdaemon01/gh-template2/.github/workflows/ci_javascript.yaml@master
         with: 
             keyvaultfile: keyvaultvars.json
             environment: development
             tag: ${{github.run_id}}
         secrets: inherit
+    
+    CI-Test:
+        permissions:
+            contents: 'read'
+            id-token: 'write'
+        needs: CI-Dev    
+        uses: killerdaemon01/gh-template2/.github/workflows/ci_javascript.yaml@master
+        with: 
+            keyvaultfile: keyvaultvars.json
+            environment: test
+            tag: ${{github.run_id}}
+        secrets: inherit
   
-    Dev:
-        needs: CI
+    Deploy-Dev:
+        needs: CI-Dev
         permissions:
             contents: 'read'
             id-token: 'write'
@@ -54,6 +37,20 @@ jobs:
             keyvaultfile: keyvaultvars.json
             tag: ${{github.run_id}}
             environment: development
+            slot_name: production
+            swap_slot: false
+        secrets: inherit
+        
+    Deploy-Test:
+        needs: CI-Dev
+        permissions:
+            contents: 'read'
+            id-token: 'write'
+        uses: killerdaemon01/gh-template2/.github/workflows/cd_javascript.yaml@master
+        with:
+            keyvaultfile: keyvaultvars.json
+            tag: ${{github.run_id}}
+            environment: test
             slot_name: production
             swap_slot: false
         secrets: inherit
