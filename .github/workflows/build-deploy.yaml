@@ -39,7 +39,7 @@ jobs:
 
         uses: killerdaemon01/gh-template2/.github/workflows/ci_javascript.yaml@master
         with: 
-            keyvaultfile: keyvaults.json
+            keyvaultfile: keyvaultvars.json
             environment: development
             tag: ${{github.run_id}}
         secrets: inherit
@@ -51,7 +51,7 @@ jobs:
             id-token: 'write'
         uses: killerdaemon01/gh-template2/.github/workflows/cd_javascript.yaml@master
         with:
-            keyvaultfile: keyvaults.json
+            keyvaultfile: keyvaultvars.json
             tag: ${{github.run_id}}
             environment: development
             slot_name: production
