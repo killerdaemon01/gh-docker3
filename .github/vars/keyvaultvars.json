@@ -1,0 +1,51 @@
+{
+    "development": [
+      {
+        "keyvaultname": "kyvazewdmlns001scmshard",
+        "username": "scmshard-acrusername",
+        "password": "scmshard-acrpassword-key",
+        "app_service_name": "apiazewdmlns101nscmhub",
+        "registry_name": "acrazewdmlns001scmshard",
+        "repository_name": "scm-hub-service"
+      }
+    ],
+    "test": [
+      {
+        "keyvaultname": "kyvazewtmlns001scmshard",
+        "username": "scmshard-acrusername",
+        "password": "scmshard-acrpassword-key",
+        "app_service_name": "apiazewtmlns101nscmhub",
+        "registry_name": "acrazewdmlns001scmshard",
+        "repository_name": "scm-hub-service"
+      }
+    ],    "preproduction": [
+      {
+        "keyvaultname": "kyvazewrmlns001scmshard",
+        "username": "scmshard-acrusername",
+        "password": "scmshard-acrpassword-key",
+        "app_service_name": "apiazewrmlns101nscmhub",
+        "registry_name": "acrazewrmlns001scmshard",
+        "repository_name": "scm-hub-service"
+      }
+    ],
+    "production": [
+      {
+        "keyvaultname": "kyvazewpmlns001scmshard",
+        "username": "scmshard-acrusername",
+        "password": "scmshard-acrpassword-key",
+        "app_service_name": "apiazewpmlns101nscmhub",
+        "registry_name": "acrazewrmlns001scmshard",
+        "repository_name": "scm-hub-service"
+      }
+    ],
+    "uat": [
+      {
+        "keyvaultname": "kyvazewumlns003scmshard",
+        "username": "scmshard-acrusername",
+        "password": "scmshard-acrpassword-key",
+        "app_service_name": "apiazewumlns101nscmhub",
+        "registry_name": "acrazewdmlns001scmshard",
+        "repository_name": "scm-hub-service"
+      }
+    ]
+  }
