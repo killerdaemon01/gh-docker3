@@ -51,6 +51,6 @@ jobs:
             keyvaultfile: keyvaultvars.json
             tag: ${{github.run_id}}
             environment: test
-            slot_name: production
-            swap_slot: false
+            slot_name: stage
+            swap_slot: true
         secrets: inherit
