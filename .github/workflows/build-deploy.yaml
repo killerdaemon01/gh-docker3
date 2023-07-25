@@ -42,7 +42,7 @@ jobs:
         secrets: inherit
         
     Deploy-Test:
-        needs: CI-Dev
+        needs: CI-Test
         permissions:
             contents: 'read'
             id-token: 'write'
