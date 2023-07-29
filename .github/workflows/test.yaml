@@ -53,7 +53,7 @@ jobs:
                       foreach ($userEntry in $users.GetEnumerator()) {
                           $user = $userEntry.Value
                           Write-Output $user.userId
-                          $key = (Get-AzKeyVaultSecret -VaultName kv29017 -Name $userId -AsPlainText)
+                          $key = (Get-AzKeyVaultSecret -VaultName kv29017 -Name $user.userId -AsPlainText)
                           $user.pwd = $key
                       }
 
