@@ -12,3 +12,4 @@ jobs:
       environment: development
       keyvaultname: kv29017
       configfilename: 'GlobalConfig.json'
+    secrets: inherit
