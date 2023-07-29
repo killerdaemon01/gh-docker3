@@ -4,6 +4,9 @@ on:
 
 jobs:
   Secrets:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     uses: killerdaemon01/gh-template2/.github/workflows/template.yaml@master
     with:
       environment: development
