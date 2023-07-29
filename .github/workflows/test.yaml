@@ -56,10 +56,14 @@ jobs:
                           Write-Output $userId
                           Write-Output $key
                           Write-Output "-------------------------------------------------------------------------------------"
-                          echo "::add-mask::$key"
+                          #echo "::add-mask::$key"
                           Write-Output "$userId=$($key)" >> $Env:GITHUB_OUTPUT
                       }
           azPSVersion: "latest"
+      - name: Print json file
+        shell: pwsh
+        run: |
+          Get-Content ${{env.kv_file}}
       - name: Replace tokens
         uses: cschleiden/replace-tokens@v1
         with:
