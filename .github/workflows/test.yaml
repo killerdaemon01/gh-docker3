@@ -1,76 +1,11 @@
-name: Fetch secrets and replace them on json file
-
+name: Fetch secrets and replace tokens
 on:
-  workflow_dispatch:
-    inputs:
-      keyvaultname:
-        description: Name of the keyvault
-        type: string
-        required: false
-        default: 'kv29017'
-
-      configfilename:
-        description: Configfile
-        type: string
-        required: false
-        default: 'GlobalConfig.json'
-
+  workflow_dispatch
 
 jobs:
   Secrets:
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-    environment: development
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the branch
-        uses: actions/checkout@v3
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          enable-AzPSSession: true 
-      - name: Find var file name
-        shell: bash
-        run: |
-          file=$(find . -name ${{inputs.configfilename}})
-          echo "$file"
-          echo "kv_file="$file"" >> $GITHUB_ENV
-      - name: Print json file before replace
-        shell: pwsh
-        run: |
-          Get-Content ${{env.kv_file}}
-
-      - name: Run Azure PowerShell script
-        uses: azure/powershell@v1
-        with:
-          inlineScript: |
-                      $hashtable = Get-Content ${{env.kv_file}} | ConvertFrom-Json -AsHashtable
-
-                      # Accessing values from the hashtable
-                      $users = $hashtable.cdt.users
-
-                      # Update the "pwd" value with the "userId" value for each user
-                      foreach ($userEntry in $users.GetEnumerator()) {
-                          $user = $userEntry.Value
-                          Write-Output $user.userId
-                          $key = (Get-AzKeyVaultSecret -VaultName kv29017 -Name $user.userId -AsPlainText)
-                          $user.pwd = $key
-                      }
-
-                      # Printing the updated hashtable
-                      $updatedJsonData = $hashtable | ConvertTo-Json -Depth 100
-                      $updatedJsonData | Out-File -FilePath ${{env.kv_file}} -Force
-
-          azPSVersion: "latest"
-      - name: Print json file after replace
-        shell: pwsh
-        run: |
-          Get-Content ${{env.kv_file}}
-
-      - name: Azure logout
-        run: |
-          az logout
+    uses: killerdaemon01/gh-template2/.github/workflows/template.yaml@master
+    with:
+      environment: development
+      keyvaultname: kv29017
+      configfilename: 'GlobalConfig.json'
