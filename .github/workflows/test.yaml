@@ -47,32 +47,26 @@ jobs:
                       $hashtable = Get-Content ${{env.kv_file}} | ConvertFrom-Json -AsHashtable
 
                       # Accessing values from the hashtable
-                      $url = $hashtable.cdt.url
                       $users = $hashtable.cdt.users
 
-                      foreach ($user in $users.GetEnumerator()) {
-                          $userId = $user.Value.userId
+                      # Update the "pwd" value with the "userId" value for each user
+                      foreach ($userEntry in $users.GetEnumerator()) {
+                          $user = $userEntry.Value
+                          Write-Output $user.userId
                           $key = (Get-AzKeyVaultSecret -VaultName kv29017 -Name $userId -AsPlainText)
-                          Write-Output $userId
-                          Write-Output $key
-                          Write-Output "-------------------------------------------------------------------------------------"
-                          #echo "::add-mask::$key"
-                          Write-Output "$userId=$($key)" >> $Env:GITHUB_OUTPUT
+                          $user.pwd = $key
                       }
+
+                      # Printing the updated hashtable
+                      $updatedJsonData = $hashtable | ConvertTo-Json -Depth 100
+                      $updatedJsonData | Out-File -FilePath ${{env.kv_file}} -Force
+
           azPSVersion: "latest"
       - name: Print json file
         shell: pwsh
         run: |
           Get-Content ${{env.kv_file}}
-      - name: Replace tokens
-        uses: cschleiden/replace-tokens@v1
-        with:
-          files: '["**/*.json"]'
-          
-      - name: Print json file
-        shell: pwsh
-        run: |
-          Get-Content ${{env.kv_file}}
+
       - name: Azure logout
         run: |
           az logout
