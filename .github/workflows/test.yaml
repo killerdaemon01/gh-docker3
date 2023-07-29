@@ -34,25 +34,23 @@ jobs:
           file=$(find . -name ${{inputs.configfilename}})
           echo "$file"
           echo "kv_file="$file"" >> $GITHUB_ENV
-      - name: Get secrets
-        run: |
-          $hashtable = Get-Content '.\global2.json' | ConvertFrom-Json -AsHashtable
 
-          # Accessing values from the hashtable
-          $url = $hashtable.cdt.url
-          $users = $hashtable.cdt.users
+      - name: Run Azure PowerShell script
+        uses: azure/powershell@v1
+        with:
+          inlineScript: |
+                      $hashtable = Get-Content ${{env.kv_file}} | ConvertFrom-Json -AsHashtable
 
-          # Printing the hashtable
-          Write-Output "URL: $url"
-          Write-Output "Users: $users"
+                      # Accessing values from the hashtable
+                      $url = $hashtable.cdt.url
+                      $users = $hashtable.cdt.users
 
-          foreach ($user in $users.GetEnumerator()) {
-              $userName = $user.Key
-              $userId = $user.Value.userId
-              $key = (Get-AzKeyVaultSecret -VaultName kv29017 -Name $userId -AsPlainText)
-              Write-Output $userId
-              Write-Output $key
-              Write-Output "-------------------------------------------------------------------------------------"
-          }
+                      foreach ($user in $users.GetEnumerator()) {
+                          $userId = $user.Value.userId
+                          #$key = (Get-AzKeyVaultSecret -VaultName kv29017 -Name $userId -AsPlainText)
+                          Write-Output $userId
+                          #Write-Output $key
+                          Write-Output "-------------------------------------------------------------------------------------"
+                      }
+          azPSVersion: "latest"
 
-        
