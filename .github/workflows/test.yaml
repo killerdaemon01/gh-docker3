@@ -56,6 +56,19 @@ jobs:
                           Write-Output $userId
                           Write-Output $key
                           Write-Output "-------------------------------------------------------------------------------------"
+                          echo "::add-mask::$key"
+                          Write-Output "$userId=$($key)" >> $Env:GITHUB_OUTPUT
                       }
           azPSVersion: "latest"
-
+      - name: Replace tokens
+        uses: cschleiden/replace-tokens@v1
+        with:
+          files: '["**/*.json"]'
+          
+      - name: Print json file
+        shell: pwsh
+        run: |
+          Get-Content ${{env.kv_file}}
+      - name: Azure logout
+        run: |
+          az logout
