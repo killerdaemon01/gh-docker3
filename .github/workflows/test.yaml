@@ -39,6 +39,10 @@ jobs:
           file=$(find . -name ${{inputs.configfilename}})
           echo "$file"
           echo "kv_file="$file"" >> $GITHUB_ENV
+      - name: Print json file before replace
+        shell: pwsh
+        run: |
+          Get-Content ${{env.kv_file}}
 
       - name: Run Azure PowerShell script
         uses: azure/powershell@v1
@@ -62,7 +66,7 @@ jobs:
                       $updatedJsonData | Out-File -FilePath ${{env.kv_file}} -Force
 
           azPSVersion: "latest"
-      - name: Print json file
+      - name: Print json file after replace
         shell: pwsh
         run: |
           Get-Content ${{env.kv_file}}
