@@ -18,6 +18,9 @@ on:
 
 jobs:
   Secrets:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     environment: development
     runs-on: ubuntu-latest
     steps:
