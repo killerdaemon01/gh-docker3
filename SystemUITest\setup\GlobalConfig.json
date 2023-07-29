@@ -1,0 +1,23 @@
+{
+    "cdt": {
+        "url": "https://abc.com",
+        "users":{
+            "NSCPConsignee": {
+                "userId": "username1",
+                "pwd": "password1"
+            },
+            "NSCPShipper": {
+                "userId": "username2",
+                "pwd": "password2"
+            },
+            "FlowConsignee": {
+                "userId": "username3",
+                "pwd": "password3"
+            },
+            "FlowShipper": {
+                "userId": "username4",
+                "pwd": "#password4"
+            }
+        }
+    }
+}
